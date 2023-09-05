@@ -1,57 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Tooltip } from 'react-tooltip'
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Tooltip } from "react-tooltip";
+import { BsDot } from "react-icons/bs";
 
-import { AppWrap, MotionWrap } from '../../wrapper';
-import { urlFor, client } from '../../client';
-import './Skills.scss';
+import { AppWrap, MotionWrap } from "../../wrapper";
+import { urlFor, client } from "../../client";
+import "./Skills.scss";
 
 const Skills = () => {
   const [experiences, setExperiences] = useState([]);
-  const [skills, setSkills] = useState([]);
+
+  // If you want to sort in descending order, you can reverse the order
+  // const sortedDataDescending = sortedData.reverse();
 
   useEffect(() => {
     const query = '*[_type == "experiences"]';
     const skillsQuery = '*[_type == "skills"]';
 
     client.fetch(query).then((data) => {
-      setExperiences(data);
-    });
-
-    client.fetch(skillsQuery).then((data) => {
-      setSkills(data);
+      const sortedExperiences = data.sort((a, b) => {
+        const dateA = new Date(a._createdAt);
+        const dateB = new Date(b._createdAt);
+        return dateA - dateB;
+      });
+      setExperiences(sortedExperiences);
     });
   }, []);
 
   return (
     <>
-      <h2 className="head-text">Skills & Experiences</h2>
+      <h2 className="head-text-skill">Experiences</h2>
 
       <div className="app__skills-container">
-        <motion.div className="app__skills-list">
-          {skills.map((skill) => (
-            <motion.div
-              whileInView={{ opacity: [0, 1] }}
-              transition={{ duration: 0.5 }}
-              className="app__skills-item app__flex"
-              key={skill.name}
-            >
-              <div
-                className="app__flex"
-                style={{ backgroundColor: skill.bgColor }}
-              >
-                <img src={urlFor(skill.icon)} alt={skill.name} />
-              </div>
-              <p className="p-text">{skill.name}</p>
-            </motion.div>
-          ))}
-        </motion.div>
         <div className="app__skills-exp">
           {experiences.map((experience) => (
-            <motion.div
-              className="app__skills-exp-item"
-              key={experience.year}
-            >
+            <motion.div className="app__skills-exp-item" key={experience.year}>
               <div className="app__skills-exp-year">
                 <p className="bold-text">{experience.year}</p>
               </div>
@@ -68,6 +51,18 @@ const Skills = () => {
                     >
                       <h4 className="bold-text">{work.name}</h4>
                       <p className="p-text">{work.company}</p>
+                      {work.tags.map((tags) => (
+                        <div className="app__experience-details">
+                          <div>
+                            <p className="p-text">
+                              <BsDot />
+                            </p>
+                          </div>
+                          <div>
+                            <p className="p-text">{tags}</p>
+                          </div>
+                        </div>
+                      ))}
                     </motion.div>
                     <Tooltip
                       id={work.name}
@@ -89,7 +84,7 @@ const Skills = () => {
 };
 
 export default AppWrap(
-  MotionWrap(Skills, 'app__skills'),
-  'skills',
-  'app__whitebg',
+  MotionWrap(Skills, "app__skills"),
+  "experience",
+  "app__primarybg"
 );

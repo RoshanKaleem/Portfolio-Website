@@ -21,13 +21,18 @@
   align-items: center;
 
   img {
-    width: 90px;
-    height: 20px;
+    width: 150px;
+    height: 40px;
 
     @media screen and (min-width: 2000px) {
       width: 180px;
       height: 40px;
     }
+  }
+
+  p {
+    color: var(--gray-color);
+    margin: 0 1rem;
   }
 }
 
