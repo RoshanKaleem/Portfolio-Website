@@ -8,7 +8,7 @@ export default {
         title: 'Title',
         type: 'string',
       },
-    
+
       {
         name: 'description',
         title: 'Description',
@@ -32,7 +32,7 @@ export default {
           hotspot: true,
         },
       },
-   
+
       {
         name: 'tags',
         title: 'Tags',
@@ -45,6 +45,19 @@ export default {
          }
        ]
       },
-     
+
+      {
+        name: 'tech',
+        title: 'Techs',
+       type:'array',
+       of: [
+         {
+           name:'tech',
+           title:'Tech',
+           type:'string'
+         }
+       ]
+      },
+
     ],
   };
